@@ -3,19 +3,20 @@ import time
 from PySide.QtCore import *
 from PySide.QtGui import *
 
-from ui_pingmainwindow import Ui_MainWindow
+import ui_pingmainwindow
 
-class MainWindow(QMainWindow,Ui_MainWindow ):
+class MainWindow(QMainWindow, ui_pingmainwindow.Ui_MainWindow ):
     def __init__(self, parent= None):
         super(MainWindow, self).__init__(parent)
+
+        self.connect(self.hostLineEdit, SIGNAL('text()'), self.enableBtn())
 
         self.setupUi(self)
 
     def enableBtn(self):
-        if self.hostLineEdit is not '':
-            self.pingBtn.enabled(True)
-            self.saveBtn.enabled(True)
-            self.defaultsBtn.enabled(True)
+        self.pingBtn.enabled(True)
+        self.saveBtn.enabled(True)
+        self.defaultsBtn.enabled(True)
 
 
 
