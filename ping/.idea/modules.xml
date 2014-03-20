@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ping.iml" filepath="$PROJECT_DIR$/.idea/ping.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../traceroute/.idea/traceroute.iml" filepath="$PROJECT_DIR$/../traceroute/.idea/traceroute.iml" />
     </modules>
   </component>
 </project>

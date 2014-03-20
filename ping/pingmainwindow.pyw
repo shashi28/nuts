@@ -6,22 +6,20 @@ from PySide.QtGui import *
 import ui_pingmainwindow
 
 class MainWindow(QMainWindow, ui_pingmainwindow.Ui_MainWindow ):
-    def __init__(self, parent= None):
+    def __init__(self, parent = None):
         super(MainWindow, self).__init__(parent)
-
-        self.connect(self.hostLineEdit, SIGNAL('text()'), self.enableBtn())
 
         self.setupUi(self)
 
-    def enableBtn(self):
-        self.pingBtn.enabled(True)
-        self.saveBtn.enabled(True)
-        self.defaultsBtn.enabled(True)
+        self.connect(self.pingBtn, SIGNAL('clicked()'), self.checkhostformat)
+
+    def checkhostformat(self):
+        if self.hostLineEdit.text() == '':
+            self.hostLineEdit.setPlaceholderText(" Hostname can not be left empty")
+            self.hostLabel.setText('<font color=red>Host / IP :</font>')
 
 
-
-def main():
-    app = QApplication(sys.argv)
-    form = MainWindow()
-    form.show()
-    app.exec_()
+app = QApplication(sys.argv)
+form = MainWindow()
+form.show()
+app.exec_()
