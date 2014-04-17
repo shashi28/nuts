@@ -62,7 +62,7 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>61</width>
+        <width>101</width>
         <height>21</height>
        </rect>
       </property>
@@ -72,7 +72,7 @@
        </font>
       </property>
       <property name="text">
-       <string>&amp;Host / IP :</string>
+       <string>Host name/ IP :</string>
       </property>
      </widget>
      <widget class="QPushButton" name="pingBtn">
@@ -167,10 +167,10 @@
         <number>0</number>
        </property>
        <property name="columnCount">
-        <number>8</number>
+        <number>10</number>
        </property>
        <attribute name="verticalHeaderVisible">
-        <bool>true</bool>
+        <bool>false</bool>
        </attribute>
        <column>
         <property name="text">
@@ -189,12 +189,22 @@
        </column>
        <column>
         <property name="text">
+         <string>Packet Size</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
          <string>Packets Sent</string>
         </property>
        </column>
        <column>
         <property name="text">
          <string>Packets Recieved</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Packets Lost</string>
         </property>
        </column>
        <column>
@@ -654,7 +664,7 @@
         <bool>true</bool>
        </attribute>
        <attribute name="verticalHeaderVisible">
-        <bool>true</bool>
+        <bool>false</bool>
        </attribute>
        <attribute name="verticalHeaderDefaultSectionSize">
         <number>30</number>
@@ -670,7 +680,7 @@
        </attribute>
        <column>
         <property name="text">
-         <string>Time</string>
+         <string>Host Name</string>
         </property>
        </column>
        <column>
@@ -680,30 +690,30 @@
        </column>
        <column>
         <property name="text">
-         <string>Status</string>
+         <string>ICMP Seq No</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Bytes</string>
+         <string>Data Size</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>Trip Time(ms)</string>
+         <string>Time To Live(TTL)</string>
         </property>
        </column>
        <column>
         <property name="text">
-         <string>TTL</string>
+         <string>Delay(ms)</string>
         </property>
        </column>
       </widget>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="hostComboBox">
       <property name="geometry">
        <rect>
-        <x>81</x>
+        <x>120</x>
         <y>10</y>
         <width>230</width>
         <height>22</height>
@@ -713,192 +723,6 @@
        <bool>true</bool>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="alerts">
-     <attribute name="title">
-      <string>Alerts</string>
-     </attribute>
-     <widget class="QGroupBox" name="alertGroupBox">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>20</y>
-        <width>271</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Alert when host is:</string>
-      </property>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>206</width>
-         <height>40</height>
-        </rect>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QRadioButton" name="onlineRadio">
-            <property name="text">
-             <string>Online</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="offlineRadio">
-            <property name="text">
-             <string>Offline</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="donotalertRadio">
-            <property name="text">
-             <string>Do Not Alert</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QGroupBox" name="notificationGroupBox">
-      <property name="geometry">
-       <rect>
-        <x>30</x>
-        <y>120</y>
-        <width>271</width>
-        <height>121</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Notifications</string>
-      </property>
-      <widget class="QCheckBox" name="soundCheckBox">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>50</y>
-         <width>76</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Play Sound</string>
-       </property>
-      </widget>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>20</y>
-         <width>231</width>
-         <height>19</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QRadioButton" name="dialogRadio">
-          <property name="text">
-           <string>Pop up Dialog</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="toastRadio">
-          <property name="text">
-           <string>Toast Pop up</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>20</x>
-         <y>80</y>
-         <width>241</width>
-         <height>22</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="emailLabel">
-          <property name="text">
-           <string>Send Email To:</string>
-          </property>
-          <property name="buddy">
-           <cstring>emailLineEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="emailLineEdit">
-          <property name="inputMask">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="placeholderText">
-           <string>someone@email.com</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QPushButton" name="applyAlertBtn">
-      <property name="geometry">
-       <rect>
-        <x>340</x>
-        <y>390</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>A&amp;pply</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="saveAlertBtn">
-      <property name="geometry">
-       <rect>
-        <x>440</x>
-        <y>390</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Sa&amp;ve</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="defaultsAlertBtn">
-      <property name="geometry">
-       <rect>
-        <x>540</x>
-        <y>390</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>&amp;Defaults</string>
-      </property>
-     </widget>
-     <zorder>applyAlertBtn</zorder>
-     <zorder>saveAlertBtn</zorder>
-     <zorder>defaultsAlertBtn</zorder>
-     <zorder>alertGroupBox</zorder>
-     <zorder>notificationGroupBox</zorder>
     </widget>
     <widget class="QWidget" name="settings">
      <attribute name="title">
@@ -954,35 +778,43 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QLabel" name="timebtwlabel">
+        <widget class="QLabel" name="timeoutlabel">
          <property name="text">
-          <string>TIme Between Pings(ms):</string>
+          <string>Time Out (ms):</string>
          </property>
          <property name="buddy">
-          <cstring>timebtwLineEdit</cstring>
+          <cstring>timeoutLineEdit</cstring>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="timebtwLineEdit"/>
+        <widget class="QLineEdit" name="timeoutLineEdit">
+         <property name="text">
+          <string>3000</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="ttlLabel">
+        <widget class="QLabel" name="nopLabel">
          <property name="text">
-          <string>TTL:</string>
+          <string>No of Packets to send :</string>
          </property>
          <property name="buddy">
-          <cstring>ttlLineEdit</cstring>
+          <cstring>countLineEdit</cstring>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="ttlLineEdit"/>
+        <widget class="QLineEdit" name="countLineEdit">
+         <property name="text">
+          <string>3</string>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="packetLabel">
          <property name="text">
-          <string>Packet Size:</string>
+          <string>Packet Size (Bytes):</string>
          </property>
          <property name="buddy">
           <cstring>packetsizeLineEdit</cstring>
@@ -990,38 +822,32 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="packetsizeLineEdit"/>
+        <widget class="QLineEdit" name="packetsizeLineEdit">
+         <property name="text">
+          <string>64</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
     </widget>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>hostComboBox</tabstop>
   <tabstop>pingBtn</tabstop>
   <tabstop>stopBtn</tabstop>
   <tabstop>saveBtn</tabstop>
-  <tabstop>onlineRadio</tabstop>
-  <tabstop>offlineRadio</tabstop>
-  <tabstop>donotalertRadio</tabstop>
-  <tabstop>dialogRadio</tabstop>
-  <tabstop>toastRadio</tabstop>
-  <tabstop>soundCheckBox</tabstop>
-  <tabstop>emailLineEdit</tabstop>
-  <tabstop>applyAlertBtn</tabstop>
-  <tabstop>saveAlertBtn</tabstop>
-  <tabstop>defaultsAlertBtn</tabstop>
-  <tabstop>timebtwLineEdit</tabstop>
-  <tabstop>ttlLineEdit</tabstop>
+  <tabstop>timeoutLineEdit</tabstop>
+  <tabstop>countLineEdit</tabstop>
   <tabstop>packetsizeLineEdit</tabstop>
   <tabstop>applySetBtn</tabstop>
   <tabstop>saveSetBtn</tabstop>
   <tabstop>defaultsSetBtn</tabstop>
   <tabstop>runTable</tabstop>
   <tabstop>statusTable</tabstop>
+  <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources/>
  <connections/>
