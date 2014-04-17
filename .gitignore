@@ -34,3 +34,12 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+.idea/.name
+.idea/dictionaries/Sapna.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/nuts.iml
+.idea/scopes/scope_settings.xml
+.idea/vcs.xml
+.idea/workspace.xml
