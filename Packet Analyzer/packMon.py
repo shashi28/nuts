@@ -31,13 +31,19 @@ class PackMon(QThread):
         self.dev.register()
         self.decoder = EthDecoder()
 
-    def sniff(self,fil):
-        with Handle(filter = fil,layer=Layer.NETWORK,priority = 1000,flags =Flag.SNIFF) as handle:
+    def sniff(self):
+        with Handle(filter=self.filter,layer=Layer.NETWORK,priority=0,flags=Flag.SNIFF) as handle:
+            #qDebug('inside sniff')
             while True:
                 rawdata = handle.recv()
                 #handle.send()
                 self.pkt = self.dev.parse_packet(rawdata)
-                self.emit(SIGNAL('tableinput(QString,QString,QString,QString)'),self.pkt.src_addr,self.pkt.dst_addr,self.pkt.ipv4_hdr.Protocol,self.calcInfo())
+                #data = self.decoder.decode(self.pkt.payload)
+                #print data
+                info = self.calcInfo()
+                protocol = self.calcProtocol()
+                self.emit(SIGNAL('tableinput(QString,QString,QString,QString,QString)'),str(self.pkt.src_addr),str(self.pkt.dst_addr),str(protocol),str(info),str(self.pkt))
+
                 #print(self.pkt)
                 #print('\n-------------\n')
                 #print("{}:{}".format(self.pkt.dst_addr, self.pkt.dst_port))
@@ -45,35 +51,47 @@ class PackMon(QThread):
 
     def calcInfo(self):
         info = ''
-        if self.pkt.Flow == 'outbound':
-            info +'OUT '
+        if self.pkt.meta.is_outbound():
+            info = info + 'OUT '
         else:
-            info +'IN '
+            info = info + 'IN '
 
-        info + self.pkt.src_port + '>' + self.pkt.dst_port
+        info = info + str(self.pkt.src_port) + ' > ' + str(self.pkt.dst_port)
+        if self.pkt.tcp_hdr is not None and self.pkt is not None:
+            if self.pkt.tcp_hdr.Ack == 1 :
+                info = info + '[ACK] '
+            if self.pkt.tcp_hdr.Syn == 1 :
+                info = info + '[SYN] '
+            if self.pkt.tcp_hdr.Psh  == 1:
+                info = info + '[PSH] '
+            if self.pkt.tcp_hdr.Rst == 1:
+                info = info + '[RST] '
+            if self.pkt.tcp_hdr.Fin == 1:
+                info = info + '[FIN] '
+            if self.pkt.tcp_hdr.Urg == 1:
+                info = info + '[URG] '
 
-        if self.pkt.tcp_hdr.Ack :
-            info + '[ACK] '
-        elif self.pkt.tcp_hdr.Syn :
-            info + '[SYN] '
-        elif self.pkt.tcp_hdr.Psh :
-            info + '[PSH] '
-        elif self.pkt.tcp_hdr.Rst :
-            info + '[RST] '
-        elif self.pkt.tcp_hdr.Fin :
-            info + '[FIN] '
-        elif self.pkt.tcp_hdr.Urg :
-            info + '[URG] '
-
-        info + 'seq = ' + self.pkt.tcp_hdr.SeqNum
-        info + ' window = ' + self.pkt.tcp_hdr.Window
-        info + ' len = '+ self.pkt.ipv4_hdr.Length
+            info = info + 'seq = ' + str(self.pkt.tcp_hdr.SeqNum)
+            info = info + ' window = ' + str(self.pkt.tcp_hdr.Window)
+        if self.pkt.ipv4_hdr is not None:
+            info = info + ' len = '+ str(self.pkt.ipv4_hdr.Length)
 
         return info
 
+    def calcProtocol(self):
+        if self.pkt.ipv4_hdr is not None:
+            if self.pkt.ipv4_hdr.Protocol == 1:
+                return 'icmp'
+            elif self.pkt.ipv4_hdr.Protocol ==  6:
+                return 'tcp'
+            elif self.pkt.ipv4_hdr.Protocol == 17:
+                return 'udp'
+
     def run(self):
-        self.sniff(self.filter)
+        #qDebug('inside run')
+        self.sniff()
         self.exec_()
 
     def setFilter(self,filtr):
-        self.filter = str (filtr)
+        #qDebug('inside setFilter')
+        self.filter = str(filtr)

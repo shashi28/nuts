@@ -1,4 +1,3 @@
-import sys
 import platform
 import pydivert
 from pydivert.windivert import *
@@ -6,42 +5,68 @@ from pydivert.winutils import *
 from pydivert.enum import *
 from pydivert.models import *
 from pydivert.decorators import *
+from PyQt4.QtCore import *
+import impacket
+from impacket.ImpactDecoder import EthDecoder
 
 version = '1.0'
 
-class Firewall():
-    def __init__(self):
-        self.setUp()
-
-    def setUp(self):
-        self.driver_dir = os.path.join(os.path.realpath(os.curdir), "lib", version)
+class Bolt(QThread):
+    def __init__(self,parent = None):
+        super(Bolt,self).__init__(parent)
+        self.block = True
+        driver_dir = os.path.join(os.path.realpath(os.curdir), "lib", version)
         if platform.architecture()[0] == "32bit":
-            self.driver_dir = os.path.join(self.driver_dir, "x86")
+            driver_dir = os.path.join(driver_dir, "x86")
         else:
-            self.driver_dir = os.path.join(self.driver_dir, "amd64")
+            driver_dir = os.path.join(driver_dir, "amd64")
 
-        os.chdir(self.driver_dir)
-        self.reg_key = r"SYSTEM\CurrentControlSet\Services\WinDivert" + version
+        os.chdir(driver_dir)
+        reg_key = r"SYSTEM\CurrentControlSet\Services\WinDivert" + version
 
 
-        self.dll_path = os.path.join(self.driver_dir, "WinDivert.dll")
+        dll_path = os.path.join(driver_dir, "WinDivert.dll")
 
-        dev = WinDivert(self.dll_path)
-        dev.register()
-        filter = 'outbound'
-        self.devInit(dev,filter)
+        self.dev = WinDivert(dll_path)
+        self.dev.register()
+        self.decoder = EthDecoder()
 
-    def devInit(self,dev,fil):
-        with Handle(dev,filter = fil,layer=Layer.NETWORK,priority= 1000,flags=Flag.SNIFF) as handle:
-            while True:
+    def drop(self):
+        with Handle(filter=self.filter,layer=Layer.NETWORK,priority=0,flags=0) as handle:
+            qDebug('inside sniff')
+            while self.block:
                 rawdata = handle.recv()
                 #handle.send()
-                pkt = dev.parse_packet(rawdata)
-                print(pkt)
-                print('\n-------------\n')
-                #print("{}:{}".format(pkt.dst_addr, pkt.dst_port))
-                #print("{}:{}".format(pkt.src_addr, pkt.src_port))
-                #print(pkt.payload)
+                self.pkt = self.dev.parse_packet(rawdata)
+                #data = self.decoder.decode(self.pkt.payload)
+                #print data
+                protocol = self.calcProtocol()
+                self.emit(SIGNAL('tableinput(QString,QString,QString,QString,QString,QString)'),str(self.pkt.src_addr),str(self.pkt.dst_addr),str(protocol),str(self.pkt.src_port),str(self.pkt.dst_port),str(self.pkt))
 
+                #print(self.pkt)
+                #print('\n-------------\n')
+                #print("{}:{}".format(self.pkt.dst_addr, self.pkt.dst_port))
+                #print("{}:{}".format(self.pkt.src_addr, self.pkt.src_port))
 
-fw = Firewall()
+    def calcProtocol(self):
+        if self.pkt.ipv4_hdr is not None:
+            if self.pkt.ipv4_hdr.Protocol == 1:
+                return 'icmp'
+            elif self.pkt.ipv4_hdr.Protocol ==  6:
+                return 'tcp'
+            elif self.pkt.ipv4_hdr.Protocol == 17:
+                return 'udp'
+
+    def run(self):
+        #qDebug('inside run')
+        self.drop()
+        self.exec_()
+
+    def setFilter(self,filtr):
+        #qDebug('inside setFilter')
+        self.filter = str(filtr)
+        self.block = True
+
+    def handle_slot_stop(self):
+        #qDebug('inside slot stop')
+        self.block = False

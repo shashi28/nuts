@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'packetAnalyzer.ui'
 #
-# Created: Sun Apr 20 20:12:23 2014
+# Created: Mon Apr 21 01:42:15 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -68,11 +68,6 @@ class Ui_MainWindow(object):
         self.line.setFrameShape(QtGui.QFrame.HLine)
         self.line.setFrameShadow(QtGui.QFrame.Sunken)
         self.line.setObjectName(_fromUtf8("line"))
-        self.textBrowser = QtGui.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(10, 350, 711, 241))
-        self.textBrowser.setDocumentTitle(_fromUtf8(""))
-        self.textBrowser.setTextInteractionFlags(QtCore.Qt.LinksAccessibleByKeyboard|QtCore.Qt.LinksAccessibleByMouse|QtCore.Qt.TextBrowserInteraction|QtCore.Qt.TextSelectableByKeyboard|QtCore.Qt.TextSelectableByMouse)
-        self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
         self.label = QtGui.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(20, 30, 41, 20))
         font = QtGui.QFont()
@@ -82,6 +77,13 @@ class Ui_MainWindow(object):
         self.filterLineEdit = QtGui.QLineEdit(self.centralwidget)
         self.filterLineEdit.setGeometry(QtCore.QRect(70, 30, 311, 20))
         self.filterLineEdit.setObjectName(_fromUtf8("filterLineEdit"))
+        self.plainTextEdit = QtGui.QPlainTextEdit(self.centralwidget)
+        self.plainTextEdit.setGeometry(QtCore.QRect(10, 350, 711, 241))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        self.plainTextEdit.setFont(font)
+        self.plainTextEdit.setReadOnly(True)
+        self.plainTextEdit.setObjectName(_fromUtf8("plainTextEdit"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.label.setBuddy(self.filterLineEdit)
 
@@ -90,7 +92,6 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.filterLineEdit, self.captureBtn)
         MainWindow.setTabOrder(self.captureBtn, self.stopBtn)
         MainWindow.setTabOrder(self.stopBtn, self.tableWidget)
-        MainWindow.setTabOrder(self.tableWidget, self.textBrowser)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "Packet Monitoring Tool", None))
