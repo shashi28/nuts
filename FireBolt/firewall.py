@@ -33,20 +33,13 @@ class Bolt(QThread):
 
     def drop(self):
         with Handle(filter=self.filter,layer=Layer.NETWORK,priority=0,flags=0) as handle:
-            qDebug('inside sniff')
+
             while self.block:
                 rawdata = handle.recv()
-                #handle.send()
                 self.pkt = self.dev.parse_packet(rawdata)
-                #data = self.decoder.decode(self.pkt.payload)
-                #print data
                 protocol = self.calcProtocol()
                 self.emit(SIGNAL('tableinput(QString,QString,QString,QString,QString,QString)'),str(self.pkt.src_addr),str(self.pkt.dst_addr),str(protocol),str(self.pkt.src_port),str(self.pkt.dst_port),str(self.pkt))
 
-                #print(self.pkt)
-                #print('\n-------------\n')
-                #print("{}:{}".format(self.pkt.dst_addr, self.pkt.dst_port))
-                #print("{}:{}".format(self.pkt.src_addr, self.pkt.src_port))
 
     def calcProtocol(self):
         if self.pkt.ipv4_hdr is not None:
@@ -58,15 +51,12 @@ class Bolt(QThread):
                 return 'udp'
 
     def run(self):
-        #qDebug('inside run')
         self.drop()
         self.exec_()
 
     def setFilter(self,filtr):
-        #qDebug('inside setFilter')
         self.filter = str(filtr)
         self.block = True
 
     def handle_slot_stop(self):
-        #qDebug('inside slot stop')
         self.block = False

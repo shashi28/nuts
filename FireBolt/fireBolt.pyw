@@ -13,7 +13,6 @@ class MainWindow(QMainWindow, ui_fireBolt.Ui_MainWindow):
 
         self.connect(self.startBtn,SIGNAL('clicked()'),self.handle_start)
         self.connect(self.stopBtn,SIGNAL('clicked()'),self.handle_stop)
-        #self.connect(self.stopBtn,SIGNAL('clicked()'),self.filterThread.handle_slot_stop)
         self.connect(self.filterBtn,SIGNAL('clicked()'),self.handle_start)
         self.connect(self.restartBtn,SIGNAL('clicked()'),self.handle_restart)
         self.connect(self.filterThread,SIGNAL('tableinput(QString,QString,QString,QString,QString,QString)'),self.setupTable)
@@ -38,17 +37,14 @@ class MainWindow(QMainWindow, ui_fireBolt.Ui_MainWindow):
 
     def handle_stop(self):
         if self.filterThread.isRunning():
-            #self.filterThread.terminate()
             self.emit(SIGNAL('stopthread()'))
-            #qDebug('Thread stop')
-    
+
     def handle_restart(self):
         self.handle_stop()
         self.handle_start()
 
 
     def setupTable(self,sip,dip,pro,sport,dport,pkt):
-        #qDebug('inside setupTable')
         tm = time.strftime('%H:%M:%S')
         self.row = self.tableWidget.currentRow() + 1
         self.tableWidget.insertRow(self.row)

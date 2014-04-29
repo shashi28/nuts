@@ -33,21 +33,12 @@ class PackMon(QThread):
 
     def sniff(self):
         with Handle(filter=self.filter,layer=Layer.NETWORK,priority=0,flags=Flag.SNIFF) as handle:
-            #qDebug('inside sniff')
             while True:
                 rawdata = handle.recv()
-                #handle.send()
                 self.pkt = self.dev.parse_packet(rawdata)
-                #data = self.decoder.decode(self.pkt.payload)
-                #print data
                 info = self.calcInfo()
                 protocol = self.calcProtocol()
                 self.emit(SIGNAL('tableinput(QString,QString,QString,QString,QString)'),str(self.pkt.src_addr),str(self.pkt.dst_addr),str(protocol),str(info),str(self.pkt))
-
-                #print(self.pkt)
-                #print('\n-------------\n')
-                #print("{}:{}".format(self.pkt.dst_addr, self.pkt.dst_port))
-                #print("{}:{}".format(self.pkt.src_addr, self.pkt.src_port))
 
     def calcInfo(self):
         info = ''
@@ -88,10 +79,8 @@ class PackMon(QThread):
                 return 'udp'
 
     def run(self):
-        #qDebug('inside run')
         self.sniff()
         self.exec_()
 
     def setFilter(self,filtr):
-        #qDebug('inside setFilter')
         self.filter = str(filtr)
